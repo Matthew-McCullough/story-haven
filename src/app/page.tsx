@@ -1,12 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import StoryFilter from '@/components/StoryFilter'
 import StoryDisplay from '@/components/StoryDisplay'
 import StormAmbience from '@/components/StormAmbience'
 import BackgroundMusic from '@/components/BackgroundMusic'
 import { Story, StoryFilters } from '@/types/story'
-import { sampleStories, getStoriesByFilters } from '@/data/stories'
+import { getStoriesByFilters } from '@/data/stories'
 
 export default function Home() {
   const [currentFilters, setCurrentFilters] = useState<StoryFilters>({})

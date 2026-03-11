@@ -2,6 +2,10 @@
 
 import { useEffect, useState } from 'react'
 
+type WindowWithWebkitAudio = Window & typeof globalThis & {
+  webkitAudioContext?: typeof AudioContext
+}
+
 export default function StormAmbience() {
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -20,35 +24,42 @@ export default function StormAmbience() {
       for (let i = 0; i < bufferSize; i++) {
         const envelope = Math.exp(-i / (audioContext.sampleRate * 0.8)) // Decay envelope
         const noise = (Math.random() * 2 - 1) * envelope * 0.1 // Low volume
-        
+
         // Add low frequency rumble
         const rumble = Math.sin(2 * Math.PI * 60 * i / audioContext.sampleRate) * envelope * 0.05
-        
+
         data[i] = noise + rumble
       }
 
       const source = audioContext.createBufferSource()
       const gainNode = audioContext.createGain()
-      
+
       source.buffer = buffer
       gainNode.gain.value = 0.03 // Very quiet
-      
+
       source.connect(gainNode)
       gainNode.connect(audioContext.destination)
-      
+
       source.start()
     }
 
     // Initialize audio context on user interaction
     const initAudio = async () => {
       try {
-        const ctx = new (window.AudioContext || (window as any).webkitAudioContext)()
+        const audioWindow = window as WindowWithWebkitAudio
+        const AudioContextClass = audioWindow.AudioContext || audioWindow.webkitAudioContext
+
+        if (!AudioContextClass) {
+          throw new Error('Web Audio API is not supported in this browser.')
+        }
+
+        const ctx = new AudioContextClass()
         setAudioContext(ctx)
-        
+
         if (ctx.state === 'suspended') {
           await ctx.resume()
         }
-      } catch (error) {
+      } catch {
         console.log('Audio not supported or blocked')
       }
     }

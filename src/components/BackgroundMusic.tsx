@@ -1,9 +1,13 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 
 interface BackgroundMusicProps {
   volume?: number
+}
+
+type WindowWithWebkitAudio = Window & typeof globalThis & {
+  webkitAudioContext?: typeof AudioContext
 }
 
 export default function BackgroundMusic({ volume = 0.15 }: BackgroundMusicProps) {
@@ -78,7 +82,14 @@ export default function BackgroundMusic({ volume = 0.15 }: BackgroundMusicProps)
   const initializeAudio = async () => {
     try {
       if (!audioContextRef.current) {
-        audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
+        const audioWindow = window as WindowWithWebkitAudio
+        const AudioContextClass = audioWindow.AudioContext || audioWindow.webkitAudioContext
+
+        if (!AudioContextClass) {
+          throw new Error('Web Audio API is not supported in this browser.')
+        }
+
+        audioContextRef.current = new AudioContextClass()
       }
 
       const audioContext = audioContextRef.current
@@ -104,7 +115,7 @@ export default function BackgroundMusic({ volume = 0.15 }: BackgroundMusicProps)
     }
   }
 
-  const startMusic = async () => {
+  const startMusic = useCallback(async () => {
     if (!userInteracted || !audioContextRef.current || !audioBufferRef.current || !gainNodeRef.current) {
       return
     }
@@ -126,15 +137,15 @@ export default function BackgroundMusic({ volume = 0.15 }: BackgroundMusicProps)
     } catch (error) {
       console.error('Failed to start background music:', error)
     }
-  }
+  }, [userInteracted])
 
-  const stopMusic = () => {
+  const stopMusic = useCallback(() => {
     if (sourceNodeRef.current) {
       sourceNodeRef.current.stop()
       sourceNodeRef.current = null
       setIsPlaying(false)
     }
-  }
+  }, [])
 
   const toggleMusic = async () => {
     if (!userInteracted) {
@@ -161,7 +172,7 @@ export default function BackgroundMusic({ volume = 0.15 }: BackgroundMusicProps)
     if (userInteracted && isLoaded && !isPlaying) {
       startMusic()
     }
-  }, [userInteracted, isLoaded])
+  }, [userInteracted, isLoaded, isPlaying, startMusic])
 
   // Handle page visibility change to pause/resume music
   useEffect(() => {
@@ -175,7 +186,7 @@ export default function BackgroundMusic({ volume = 0.15 }: BackgroundMusicProps)
 
     document.addEventListener('visibilitychange', handleVisibilityChange)
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
-  }, [isPlaying, userInteracted, isLoaded])
+  }, [isPlaying, userInteracted, isLoaded, startMusic, stopMusic])
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
