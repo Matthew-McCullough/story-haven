@@ -18,19 +18,30 @@ export const metadata: Metadata = {
   description:
     "Magical bedtime stories for families everywhere. Discover free stories with immersive ambience, filtering, and narration.",
   openGraph: {
-    title: "Story Haven",
-    description:
-      "Magical bedtime stories for families everywhere. Discover free stories with immersive ambience, filtering, and narration.",
-    url: "https://story-haven-three.vercel.app",
-    siteName: "Story Haven",
-    type: "website",
-  },
+  title: "Story Haven",
+  description:
+    "Magical bedtime stories for families everywhere. Discover free stories with immersive ambience, filtering, and narration.",
+  url: "https://story-haven-three.vercel.app",
+  siteName: "Story Haven",
+
+  images: [
+    {
+      url: "/story-haven-preview.png",
+      width: 1200,
+      height: 630,
+      alt: "Story Haven App",
+    },
+  ],
+
+  type: "website",
+},
   twitter: {
-    card: "summary_large_image",
-    title: "Story Haven",
-    description:
-      "Magical bedtime stories for families everywhere. Discover free stories with immersive ambience, filtering, and narration.",
-  },
+  card: "summary_large_image",
+  title: "Story Haven",
+  description:
+    "Magical bedtime stories for families everywhere. Discover free stories with immersive ambience, filtering, and narration.",
+  images: ["/story-haven-preview.png"],
+},
 };
 
 export default function RootLayout({
