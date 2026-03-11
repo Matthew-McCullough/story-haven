@@ -240,7 +240,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900/85 via-amber-900/80 to-gray-900/85 backdrop-blur-md rounded-lg mx-4 shadow-2xl border border-amber-600/50"></div>
           <div className="relative z-10">
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 drop-shadow-xl italic" style={{ fontFamily: 'cursive', textShadow: '3px 3px 6px rgba(0,0,0,0.7)' }}>
-              Once Upon A Time...
+              Story Haven
             </h1>
             <p className="text-lg md:text-xl text-amber-100 font-medium italic max-w-3xl mx-auto leading-relaxed drop-shadow-lg" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.6)' }}>
               ✨ Magical bedtime stories for families everywhere - completely free! 📚👨‍👩‍👧‍👦
