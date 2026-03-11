@@ -13,8 +13,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://story-haven-three.vercel.app"),
   title: "Story Haven",
-  description: "Magical bedtime stories for families everywhere. Discover and listen to free stories with immersive ambience and narration.",
+  description:
+    "Magical bedtime stories for families everywhere. Discover free stories with immersive ambience, filtering, and narration.",
+  openGraph: {
+    title: "Story Haven",
+    description:
+      "Magical bedtime stories for families everywhere. Discover free stories with immersive ambience, filtering, and narration.",
+    url: "https://story-haven-three.vercel.app",
+    siteName: "Story Haven",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Story Haven",
+    description:
+      "Magical bedtime stories for families everywhere. Discover free stories with immersive ambience, filtering, and narration.",
+  },
 };
 
 export default function RootLayout({
